@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. Admin (Single User)
+model Admin {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// 2. Instructor
+model Instructor {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  role      String // e.g., "Creative Director"
+  bio       String // HTML
+  avatarUrl String? // R2 URL
+  videoUrl  String? // R2 URL
+  courses   Course[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 3. Course Type
+enum CourseType {
+  COURSE    // Uzun Dönem Eğitim
+  WORKSHOP  // Kısa Dönem Atölye
+}
+
+// 4. Course
+model Course {
+  id          String       @id @default(uuid())
+  title       String
+  slug        String       @unique
+  type        CourseType   @default(COURSE)
+  summary     String
+  description String // HTML
+  coverImage  String? // R2 URL
+  videoUrl    String? // R2 URL
+  
+  // Course-specific fields
+  duration    String? // e.g., "12 Weeks" (for COURSE type)
+  curriculum  Json? // List of topics/weeks (for COURSE type)
+  
+  // Workshop-specific fields (when type = WORKSHOP)
+  startDate            DateTime?
+  endDate              DateTime?
+  capacity             Int?
+  applicationDeadline  DateTime?
+  
+  instructors Instructor[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// 5. Event
+enum EventType {
+  THEATER
+  CINEMA
+  OTHER
+}
+
+model Event {
+  id          String              @id @default(uuid())
+  title       String
+  slug        String              @unique
+  date        DateTime
+  type        EventType
+  description String              // HTML
+  coverImage  String?             // R2 URL
+  videoUrl    String?             // R2 URL
+  isFeatured  Boolean             @default(false)
+  gallery     EventGalleryImage[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+model EventGalleryImage {
+  id        String   @id @default(uuid())
+  url       String // R2 URL
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+// Academy News - "Akademide Ne Var"
+model AcademyNews {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  coverImage  String?  // R2 URL
+  videoUrl    String?  // R2 URL
+  content     String   // HTML
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Press Coverage - "Basında Biz"
+model PressNews {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  coverImage  String?  // R2 URL
+  videoUrl    String?  // R2 URL
+  content     String   // HTML
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+// 6. Application
+enum ApplicationStatus {
+  PENDING
+  CALLED
+  APPROVED
+  REJECTED
+}
+
+model Application {
+  id             String            @id @default(uuid())
+  firstName      String
+  lastName       String
+  phone          String
+  email          String
+  status         ApplicationStatus @default(PENDING)
+  adminNote      String?
+  isConsentGiven Boolean           @default(false) // KVKK
+  
+  // Tracking
+  utmSource      String?
+  utmMedium      String?
+  utmCampaign    String?
+  referrer       String?
+
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+// 7. Site Settings (Singleton)
+model SiteSettings {
+  id            Int     @id @default(1)
+  
+  // Content
+  aboutText     String? // HTML
+  privacyPolicy String? // HTML
+  cookiePolicy  String? // HTML, for Cookie Consent
+  contactInfo   String? // HTML or String
+  
+  // Social
+  socialLinks   Json?   // { instagram, twitter, linkedin, youtube, facebook }
+  
+  // SEO Meta
+  seoTitle       String? @default("Hakan Karsak Akademi")
+  seoDescription String? @default("Hakan Karsak Akademi Resmi Web Sitesi")
+  seoKeywords    String? // Comma separated
+
+  // Integrations & Verification
+  googleAnalyticsId      String? // G-XXXXXXXXXX
+  googleTagManagerId     String? // GTM-XXXXXXX
+  googleSiteVerification String? // HTML Meta Content
+
+  metaPixelId          String? // XXXXXXXXXXXXXXX
+  metaSiteVerification String?
+
+  yandexMetricaId        String? // XXXXXXXX
+  yandexSiteVerification String?
+
+  // Microsoft (Bing)
+  microsoftClarityId     String? // XXXXXXXX
+  bingSiteVerification   String? // HTML Meta Content
+  
+  // Maps & Navigation
+  mapsEmbedUrl   String? // Iframe src
+  mapsGoogleUrl  String? // https://goo.gl/maps/...
+  mapsAppleUrl   String? // http://maps.apple.com/...
+  mapsYandexUrl  String? // https://yandex.com/maps/...
+  mapsBingUrl    String? // https://bing.com/maps/...
+
+  // Hero Section
+  heroTitle      String? @default("SAHNE SENİN.")
+  heroSubtitle   String? @default("Hakan Karsak Akademi ile oyunculuk yeteneğinizi keşfedin.")
+  heroMediaUrl   String? // R2 URL (Image or Video)
+  heroMediaType  String? @default("image") // 'image' or 'video'
+
+  updatedAt     DateTime @updatedAt
+}
