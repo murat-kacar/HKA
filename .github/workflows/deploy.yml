@@ -1,0 +1,42 @@
+name: CD - Deploy to VPS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Manuel tetikleme imkanı
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🚀 Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            echo "📦 Deploying HKA..."
+            cd /var/www/hka
+            
+            echo "🔄 Pulling latest changes..."
+            git pull origin main
+            
+            echo "🐳 Building and restarting containers..."
+            docker-compose up -d --build
+            
+            echo "🗄️ Running database migrations..."
+            docker-compose exec -T app npx prisma db push
+            
+            echo "✅ Deployment completed successfully!"
+            echo "🌍 Site is live!"
+      
+      - name: ✅ Deployment Status
+        if: success()
+        run: echo "🎉 Deployment to VPS completed successfully!"
+      
+      - name: ❌ Deployment Failed
+        if: failure()
+        run: echo "💥 Deployment failed! Check the logs above."

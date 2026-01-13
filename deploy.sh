@@ -2,7 +2,7 @@
 
 # Configuration
 APP_DIR="/var/www/hka"
-GIT_REPO="<YOUR_GIT_REPO_URL>"
+GIT_REPO="https://github.com/murat-kacar/HKA.git"
 
 echo "🚀 Starting Deployment..."
 
