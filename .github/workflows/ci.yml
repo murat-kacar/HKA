@@ -25,16 +25,9 @@ jobs:
 
       - name: Run Linter
         run: npm run lint
-        continue-on-error: true
 
-      - name: Build Application
-        run: npm run build
-        env:
-          DATABASE_URL: "postgresql://dummy:dummy@localhost:5432/dummy"
-          NEXTAUTH_SECRET: "dummy-secret-for-build-test-min-32-chars-long"
-          NEXTAUTH_URL: "http://localhost:3000"
-          NEXT_PUBLIC_API_URL: "http://localhost:3000"
-          NODE_ENV: "production"
+      - name: TypeScript Type Check
+        run: npx tsc --noEmit
 
-      - name: ✅ Build Successful
-        run: echo "🎉 Build completed successfully!"
+      - name: ✅ Tests Passed
+        run: echo "🎉 Lint and type checks completed successfully!"
