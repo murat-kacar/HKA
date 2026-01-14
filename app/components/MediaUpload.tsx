@@ -78,6 +78,7 @@ export default function MediaUpload({
                 onUploadComplete(result.url);
             }
         } catch (err) {
+            console.error('Upload error:', err);
             setError('Upload failed unexpectedly.');
         } finally {
             setIsUploading(false);

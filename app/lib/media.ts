@@ -2,7 +2,6 @@ import sharp from 'sharp';
 import ffmpeg from 'fluent-ffmpeg';
 import path from 'path';
 import os from 'os';
-import fs from 'fs';
 
 // Image Processing
 export async function processImage(buffer: Buffer): Promise<Buffer> {

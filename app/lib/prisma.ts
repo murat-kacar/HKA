@@ -25,7 +25,7 @@ try {
     console.error("CRITICAL: Could not load @prisma/client or Query Engine. Using Mock.", e);
     // Mock Prisma Client to prevent build failure
     prisma = new Proxy({}, {
-        get: (target, prop) => {
+        get: () => {
             // Logic: fetch/find calls return a promise that rejects or resolves null
             return () => Promise.resolve(null); // Return null to simulate "not found" instead of crash
         }
