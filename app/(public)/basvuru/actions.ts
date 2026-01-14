@@ -57,7 +57,7 @@ export async function createApplicationAction(prevState: any, formData: FormData
         };
     }
 
-    const { firstName, lastName, phone, email, isConsentGiven, interest, utmSource, utmMedium, utmCampaign, referrer } = validation.data;
+    const { firstName, lastName, phone, email, interest, utmSource, utmMedium, utmCampaign, referrer } = validation.data;
 
     try {
         await prisma.application.create({

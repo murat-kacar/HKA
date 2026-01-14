@@ -1,7 +1,6 @@
 import prisma from '@/app/lib/prisma';
 import Link from 'next/link';
 import DeleteButton from './DeleteButton';
-import Image from 'next/image';
 
 export default async function InstructorsPage() {
     const instructors = await prisma.instructor.findMany({

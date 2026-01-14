@@ -70,6 +70,7 @@ export async function deleteInstructorAction(id: string) {
         revalidatePath('/admin/instructors');
         return { message: 'Deleted successfully' };
     } catch (error) {
+        console.error('Delete instructor error:', error);
         return { error: 'Failed to delete' };
     }
 }

@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import prisma from '@/app/lib/prisma';
-import { Instagram, Twitter, Linkedin, Youtube, Facebook, MapPin, Mail, Phone } from 'lucide-react';
+import { Instagram, Twitter, Linkedin, Youtube, MapPin, Mail, Phone } from 'lucide-react';
 
 export default async function Footer() {
     // Fetch data directly in Server Component

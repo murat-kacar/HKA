@@ -13,8 +13,8 @@ export default async function PublicLayout({
     let settings = null;
     try {
         settings = await prisma.siteSettings.findUnique({ where: { id: 1 } });
-    } catch (error) {
-        console.log('SiteSettings table not found, using defaults');
+    } catch (err) {
+        console.log('SiteSettings table not found, using defaults', err);
     }
     const social = settings?.socialLinks as any || {};
 

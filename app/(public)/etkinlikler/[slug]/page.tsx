@@ -8,13 +8,13 @@ import JsonLd from '@/app/components/JsonLd';
 import { Calendar, Tag, ArrowLeft, Image as ImageIcon } from 'lucide-react';
 
 interface EventPageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
 }
 
 // Generate Metadata
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: EventPageProps): Promise<Metadata> {
     const { slug } = await params;
     const event = await prisma.event.findUnique({
         where: { slug }

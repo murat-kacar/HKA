@@ -3,7 +3,7 @@ import prisma from '@/app/lib/prisma';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { Calendar, MapPin, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import PageHeroGrid from '@/app/components/PageHeroGrid';
 
 export const metadata: Metadata = {
@@ -12,21 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EventsPage() {
-    const events = await prisma.event.findMany({
-        orderBy: { date: 'asc' }, // Upcoming events first
-        where: {
-            date: {
-                gte: new Date(new Date().setHours(0, 0, 0, 0)) // Only future or today's events? Maybe show all for portfolio sake. Let's show all but highlight future.
-                // Actually, for a portfolio site, showing past events is good. Let's just sort Descending (Newest first).
-            }
-        }
-    });
-
-    // Actually, usually users want to see simple upcoming first.
-    // Let's do: Future Events (Ascending), then Past Events (Descending). 
-    // For MVP/Simplicity, let's just show 'Upcoming' roughly or just all sorted by date Descending looks best for "What are we doing lately".
-    // Reverting to Descending sort for visual consistency.
-
+    // Fetch all events sorted by date descending (most recent first)
     const allEvents = await prisma.event.findMany({
         orderBy: { date: 'desc' }
     });
