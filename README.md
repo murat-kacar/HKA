@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HKA - Halk Kültürü Akademisi
 
-## Getting Started
+Next.js 16, Prisma, PostgreSQL ve Docker ile geliştirilmiş modern web uygulaması.
 
-First, run the development server:
+## 🚀 Hızlı Başlangıç
+
+### Docker ile (Önerilen)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Environment dosyasını oluştur
+cp .env.example .env
+
+# 2. Docker container'ları başlat
+docker-compose up -d
+
+# 3. Migration'ları uygula
+docker-compose exec app npx prisma migrate deploy
+
+# 4. Uygulamayı aç
+# http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Detaylı bilgi için**: [DOCKER_SETUP.md](./DOCKER_SETUP.md) dosyasını inceleyin.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Manuel Kurulum
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 1. Bağımlılıkları kur
+npm install
 
-## Learn More
+# 2. Environment dosyasını oluştur
+cp .env.example .env
+# DATABASE_URL'i kendi PostgreSQL sunucunuza göre düzenleyin
 
-To learn more about Next.js, take a look at the following resources:
+# 3. Prisma migration'larını çalıştır
+npx prisma migrate deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# 4. Development server'ı başlat
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Uygulamayı [http://localhost:3000](http://localhost:3000) adresinde açın.
 
-## Deploy on Vercel
+## 📁 Proje Yapısı
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+app/
+├── (public)/          # Public sayfalar (anasayfa, eğitimler, vb.)
+├── admin/             # Admin panel
+├── components/        # Reusable React components
+├── actions/           # Server actions
+└── lib/              # Utility fonksiyonlar
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+prisma/
+├── schema.prisma      # Database schema
+├── migrations/        # Database migration'ları
+└── seed.ts           # Seed data
+
+docker-compose.yml     # Docker servis tanımları
+Dockerfile            # App container yapılandırması
+```
+
+## 🛠️ Teknoloji Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Database**: PostgreSQL 18
+- **ORM**: Prisma 5
+- **Styling**: Tailwind CSS 4
+- **Editor**: Tiptap (Rich Text Editor)
+- **Media**: Sharp (Image Processing)
+- **Container**: Docker & Docker Compose
+
+## 📚 Dökümanlar
+
+- [Docker Kurulum ve Kullanım Rehberi](./DOCKER_SETUP.md) - Detaylı Docker komutları ve workflow
+- [.env.example](./.env.example) - Environment değişkenleri şablonu
+
+## 🔗 Faydalı Linkler
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+
+## 📝 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır.
